@@ -1,0 +1,6 @@
+export NGINX_TAG=0.0
+
+export FRONTEND_TAG=0.0
+
+export BACKEND_TAG=0.0
+export BACKEND_POSTGRES_TAG=9.6
