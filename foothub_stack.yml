@@ -19,8 +19,6 @@ services:
     env_file:
       - ./enviroment/auth/postgres
       - ./enviroment/auth/django
-    environment:
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET}
 
 volumes:
   auth_pgdata:

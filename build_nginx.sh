@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .tags
+
 docker build . \
 	--file Dockerfile \
 	--tag foothub/nginx:$NGINX_TAG  \
