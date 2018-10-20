@@ -1,3 +1,0 @@
-[submodule "auth"]
-	path = auth
-	url = git@github.com:foothub/auth-service.git
