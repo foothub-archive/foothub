@@ -2,15 +2,11 @@
 
 source .tags
 
-docker build . \
-	--file Dockerfile \
-	--tag foothub/nginx:$NGINX_TAG  \
-	--build-arg FRONTEND_TAG=$FRONTEND_TAG \
+docker build . --tag foothub/nginx:latest \
 
 RESULT=$?
 
 if [ $RESULT == 0 ]; then
-	docker push \
-		foothub/nginx:$NGINX_TAG
+	docker push foothub/nginx:latest
 fi
 

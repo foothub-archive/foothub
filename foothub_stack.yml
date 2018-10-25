@@ -3,19 +3,19 @@ version: '3'
 services:
 
   nginx:
-    image: "foothub/nginx:${NGINX_TAG}"
+    image: foothub/nginx:latest
     ports:
       - "8000:80"
 
   auth_postgres:
-    image: "postgres:${AUTH_POSTGRES_TAG}"
+    image: postgres:9.6
     volumes:
       - auth_pgdata:/var/lib/postgresql/data
     env_file:
       - ./enviroment/auth/postgres
 
   auth:
-    image: "foothub/auth:${AUTH_TAG}"
+    image: foothub/auth:latest
     env_file:
       - ./enviroment/auth/postgres
       - ./enviroment/auth/django
