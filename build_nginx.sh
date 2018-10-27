@@ -2,7 +2,7 @@
 
 source .tags
 
-docker build . --tag foothub/nginx:latest \
+docker build . --tag foothub/nginx:latest
 
 RESULT=$?
 
