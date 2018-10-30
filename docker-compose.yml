@@ -2,23 +2,44 @@ version: '3'
 
 services:
 
-  backend_postgres:
+  auth_postgres:
     image: "postgres:9.6"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - auth_pgdata:/var/lib/postgresql/data
     env_file:
-      - ./enviroment/backend/postgres
+      - ./dev/env/auth/postgres
 
   auth:
     env_file:
-      - ./enviroment/backend/postgres
-      - ./enviroment/backend/django
+      - ./dev/env/auth/postgres
+      - ./dev/env/auth/django
     build: ./auth/
     volumes:
      - ./auth/:/code
     depends_on:
-     - backend_postgres
+     - auth_postgres
     ports:
       - "8001:8000"
+
+  core_postgres:
+    image: "postgres:9.6"
+    volumes:
+      - core_pgdata:/var/lib/postgresql/data
+    env_file:
+      - ./dev/env/core/postgres
+
+  core:
+    env_file:
+      - ./dev/env/core/postgres
+      - ./dev/env/core/django
+    build: ./core/
+    volumes:
+     - ./core/:/code
+    depends_on:
+     - core_postgres
+    ports:
+      - "8002:8000"
+
 volumes:
-  pgdata:
+  auth_pgdata:
+  core_pgdata:

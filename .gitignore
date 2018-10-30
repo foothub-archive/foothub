@@ -1,2 +1,2 @@
-enviroment/*
-keys/*
+prod/*
+dev/keys/*
