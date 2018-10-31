@@ -12,13 +12,27 @@ services:
     volumes:
       - auth_pgdata:/var/lib/postgresql/data
     env_file:
-      - ./enviroment/auth/postgres
+      - ./prod/env/auth/postgres
 
   auth:
     image: foothub/auth:latest
     env_file:
-      - ./enviroment/auth/postgres
-      - ./enviroment/auth/django
+      - ./prod/env/auth/postgres
+      - ./prod/env/auth/django
+
+  core_postgres:
+    image: postgres:9.6
+    volumes:
+      - core_pgdata:/var/lib/postgresql/data
+    env_file:
+      - ./prod/env/core/postgres
+
+  core:
+    image: foothub/core:latest
+    env_file:
+      - ./prod/env/core/postgres
+      - ./prod/env/core/django
 
 volumes:
   auth_pgdata:
+  core_pgdata:
