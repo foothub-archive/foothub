@@ -7,19 +7,67 @@ services:
     volumes:
       - auth_pgdata:/var/lib/postgresql/data
     env_file:
-      - ./dev/env/auth/postgres
+      - ./auth/dev/env/postgres
+
+  auth_redis:
+    image: redis:5.0
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./auth/dev/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+
+  auth_worker:
+    image: worker
+    env_file:
+      - ./auth/dev/env/postgres
+      - ./auth/dev/env/django
+      - ./auth/dev/env/redis
+    build: 
+      context: ./auth/
+      dockerfile: ./Dockerfile.worker
+    volumes:
+      - ./auth/:/code
+    depends_on:
+      - auth_postgres
+      - auth_redis
+
+  auth_flower:
+    image: flower
+    env_file:
+      - ./auth/dev/env/postgres
+      - ./auth/dev/env/django
+      - ./auth/dev/env/redis
+      - ./auth/dev/env/flower
+    build: 
+      context: ./auth/
+      dockerfile: ./Dockerfile.flower
+    volumes:
+      - ./auth/:/code
+    ports:
+      - "8551:5555"
+    depends_on:
+      - auth_postgres
+      - auth_redis
+      - auth_worker
 
   auth:
     env_file:
-      - ./dev/env/auth/postgres
-      - ./dev/env/auth/django
-    build: ./auth/
+      - ./auth/dev/env/postgres
+      - ./auth/dev/env/django
+      - ./auth/dev/env/redis
+    build: 
+      context: ./auth
+      dockerfile: ./Dockerfile.app
     volumes:
-     - ./auth/:/code
-    depends_on:
-     - auth_postgres
+      - ./auth/:/code
     ports:
       - "8001:8000"
+    depends_on:
+      - auth_postgres
+      - auth_redis
+      - auth_worker
+      - auth_flower
 
   core_postgres:
     image: "postgres:9.6"
